@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parthav — Full Stack Developer & AI Engineer</title>
+  <meta name="description" content="Portfolio of Parthav — Full Stack Developer, AI/ML Engineer, and Backend Architect building digital experiences with cutting-edge technologies." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,800;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- 1. LOADER -->
+  <div id="loader">
+    <div class="loader-inner">
+      <span class="loader-brand">PARTHAV</span>
+      <div class="loader-track">
+        <div id="loader-bar"></div>
+      </div>
+      <span id="loader-percent">0%</span>
+    </div>
+  </div>
+
+  <!-- 2. FIXED HEADER -->
+  <header class="site-header">
+    <nav>
+      <a href="#" class="nav-logo">Parthav</a>
+      <div class="nav-links">
+        <a href="https://github.com/parthav15" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/parthav-s-ai/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:parthavsabrwal@gmail.com">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- 3. HERO (standalone 100vh) -->
+  <section class="hero-standalone" id="hero">
+    <div class="hero-content align-left">
+      <span class="section-label">001 / Introduction</span>
+      <h1 class="hero-heading">
+        <span class="word accent">AI</span>
+        <span class="word">Systems</span>
+        <span class="word">&amp;</span>
+        <span class="word accent">Solutions</span>
+        <span class="word accent">Architect</span>
+      </h1>
+      <p class="hero-tagline">Building digital experiences with cutting-edge technologies and AI-driven solutions.</p>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 4. CANVAS (fixed, full viewport — no wrapper) -->
+  <canvas id="canvas"></canvas>
+
+  <!-- 5. DARK OVERLAY -->
+  <div id="dark-overlay"></div>
+
+  <!-- 6. MARQUEE -->
+  <div class="marquee-wrap" id="marquee-1" data-scroll-speed="-20" data-enter="20" data-leave="60">
+    <span class="marquee-text">ARCHITECT &mdash; ENGINEER &mdash; DEVELOPER &mdash; STRATEGIST &mdash; ARCHITECT &mdash; ENGINEER &mdash; DEVELOPER &mdash; STRATEGIST &mdash;</span>
+  </div>
+
+  <!-- 7. SCROLL CONTAINER -->
+  <div id="scroll-container">
+
+    <!-- SECTION: About -->
+    <section class="scroll-section section-content align-left"
+             data-enter="10" data-leave="48" data-animation="fade-up">
+      <div class="section-inner">
+        <span class="section-label">002 / About</span>
+        <h2 class="section-heading">Hi, I'm Parthav</h2>
+        <p class="section-body">A passionate full-stack developer and AI/ML engineer focused on building scalable applications and intelligent systems. I turn complex problems into elegant, performant solutions.</p>
+      </div>
+    </section>
+
+    <!-- SECTION: CTA (persists) -->
+    <section class="scroll-section section-content section-cta align-right"
+             data-enter="48" data-leave="100" data-animation="scale-up" data-persist="true">
+      <div class="section-inner">
+        <span class="section-label">003 / Connect</span>
+        <h2 class="section-heading">Let's Build Something</h2>
+        <p class="section-body">Got a project in mind? I'm always open to discussing new opportunities, creative ideas, or just tech in general.</p>
+        <button class="cta-button" id="open-contact">Get In Touch</button>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- 8. CONTACT MODAL -->
+  <div id="contact-modal" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close" id="close-contact" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M4 4l12 12M16 4L4 16"/>
+        </svg>
+      </button>
+      <span class="modal-label">Let's Talk</span>
+      <h3 class="modal-heading">Get In Touch</h3>
+
+      <form id="contact-form" action="https://formspree.io/f/xbjngorb" method="POST">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required autocomplete="name" placeholder="Your name" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required autocomplete="email" placeholder="your@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4" required placeholder="Tell me about your project..."></textarea>
+        </div>
+        <button type="submit" class="form-submit" id="form-submit">
+          <span class="submit-text">Send Message</span>
+          <span class="submit-loader"></span>
+        </button>
+      </form>
+
+      <div class="form-success" id="form-success">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="24" r="22" stroke="var(--text-accent)" stroke-width="2"/>
+          <path d="M14 24l7 7 13-13" stroke="var(--text-accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h4>Message Sent</h4>
+        <p>I'll get back to you soon.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CDN Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
