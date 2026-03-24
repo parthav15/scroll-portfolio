@@ -1,64 +1,54 @@
-/* ============================================================
-   PARTHAV — Scroll-Driven Portfolio · app.js
-   ============================================================ */
 (function () {
   "use strict";
 
-  const FRAME_COUNT = 126;
-  const FRAME_SPEED = 2.0;
+  var FRAME_COUNT = 126;
+  var FRAME_SPEED = 2.0;
 
-  /* DOM */
-  const loader       = document.getElementById("loader");
-  const loaderBar    = document.getElementById("loader-bar");
-  const loaderPct    = document.getElementById("loader-percent");
-  const hero         = document.getElementById("hero");
-  const canvas       = document.getElementById("canvas");
-  const ctx          = canvas.getContext("2d");
-  const scroller     = document.getElementById("scroll-container");
-  const darkOverlay  = document.getElementById("dark-overlay");
-  const sections     = document.querySelectorAll(".scroll-section");
+  var loader    = document.getElementById("loader");
+  var loaderBar = document.getElementById("loader-bar");
+  var loaderPct = document.getElementById("loader-percent");
+  var hero      = document.getElementById("hero");
+  var canvas    = document.getElementById("canvas");
+  var ctx       = canvas.getContext("2d");
+  var scroller  = document.getElementById("scroll-container");
+  var darkOverlay = document.getElementById("dark-overlay");
+  var sections  = document.querySelectorAll(".scroll-section");
 
-  /* State */
-  const frames = [];
-  let cur = -1, loaded = 0;
+  var frames = [];
+  var cur = -1, loaded = 0;
 
-  /* ---------- helpers ---------- */
   function pad(n) { return String(n).padStart(4, "0"); }
   function src(i) { return "frames/frame_" + pad(i + 1) + ".webp"; }
 
-  /* ---------- canvas sizing (retina-aware) ---------- */
   function resize() {
-    const dpr = devicePixelRatio || 1;
-    const w = innerWidth, h = innerHeight;
-    canvas.width  = w * dpr;
+    var dpr = devicePixelRatio || 1;
+    var w = innerWidth, h = innerHeight;
+    canvas.width = w * dpr;
     canvas.height = h * dpr;
-    canvas.style.width  = w + "px";
+    canvas.style.width = w + "px";
     canvas.style.height = h + "px";
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);   // reset + scale in one call
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  /* ---------- draw: pure cover, no margins ---------- */
   function draw(i) {
-    const img = frames[i];
+    var img = frames[i];
     if (!img || !img.naturalWidth) return;
-    const w = innerWidth, h = innerHeight;
-    const scale = Math.max(w / img.naturalWidth, h / img.naturalHeight);
-    const dw = img.naturalWidth  * scale;
-    const dh = img.naturalHeight * scale;
+    var w = innerWidth, h = innerHeight;
+    var scale = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+    var dw = img.naturalWidth * scale;
+    var dh = img.naturalHeight * scale;
     ctx.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
   }
 
-  /* ---------- preloader ---------- */
   function preload() {
     return new Promise(function (done) {
-      for (let i = 0; i < FRAME_COUNT; i++) {
-        const img = new Image();
+      for (var i = 0; i < FRAME_COUNT; i++) {
+        var img = new Image();
         img.onload = img.onerror = function () {
           loaded++;
-          const pct = (loaded / FRAME_COUNT) * 100;
+          var pct = (loaded / FRAME_COUNT) * 100;
           loaderBar.style.width = pct + "%";
           loaderPct.textContent = Math.round(pct) + "%";
-          /* draw frame 0 as soon as it's ready */
           if (loaded === 1) { resize(); draw(0); cur = 0; }
           if (loaded === FRAME_COUNT) done();
         };
@@ -68,8 +58,7 @@
     });
   }
 
-  /* ---------- Lenis ---------- */
-  const lenis = new Lenis({
+  var lenis = new Lenis({
     duration: 1.2,
     easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
     smoothWheel: true,
@@ -79,10 +68,9 @@
   gsap.ticker.lagSmoothing(0);
   lenis.stop();
 
-  /* ---------- hero entrance ---------- */
   function animateHero() {
-    var label   = hero.querySelector(".section-label");
-    var words   = hero.querySelectorAll(".word");
+    var label = hero.querySelector(".section-label");
+    var words = hero.querySelectorAll(".word");
     var tagline = hero.querySelector(".hero-tagline");
 
     gsap.fromTo(label,
@@ -99,7 +87,6 @@
     });
   }
 
-  /* ---------- hero fade on scroll ---------- */
   function initHeroFade() {
     ScrollTrigger.create({
       trigger: scroller, start: "top top", end: "bottom bottom", scrub: true,
@@ -109,7 +96,6 @@
     });
   }
 
-  /* ---------- frame ↔ scroll ---------- */
   function initFrameScroll() {
     ScrollTrigger.create({
       trigger: scroller, start: "top top", end: "bottom bottom", scrub: true,
@@ -123,25 +109,24 @@
     });
   }
 
-  /* ---------- section animations ---------- */
   function initSections() {
     sections.forEach(function (sec) {
-      var type    = sec.dataset.animation;
+      var type = sec.dataset.animation;
       var persist = sec.dataset.persist === "true";
-      var enter   = +sec.dataset.enter / 100;
-      var leave   = +sec.dataset.leave / 100;
-      var kids    = sec.querySelectorAll(
+      var enter = +sec.dataset.enter / 100;
+      var leave = +sec.dataset.leave / 100;
+      var kids = sec.querySelectorAll(
         ".section-label,.section-heading,.section-body,.section-note,.cta-button,.stat,.exp-item"
       );
 
       var tl = gsap.timeline({ paused: true });
       switch (type) {
-        case "fade-up":     tl.from(kids, { y: 50,  opacity: 0, stagger: 0.12, duration: 0.9, ease: "power3.out" }); break;
+        case "fade-up":     tl.from(kids, { y: 50, opacity: 0, stagger: 0.12, duration: 0.9, ease: "power3.out" }); break;
         case "slide-left":  tl.from(kids, { x: -80, opacity: 0, stagger: 0.14, duration: 0.9, ease: "power3.out" }); break;
-        case "slide-right": tl.from(kids, { x: 80,  opacity: 0, stagger: 0.14, duration: 0.9, ease: "power3.out" }); break;
+        case "slide-right": tl.from(kids, { x: 80, opacity: 0, stagger: 0.14, duration: 0.9, ease: "power3.out" }); break;
         case "scale-up":    tl.from(kids, { scale: 0.85, opacity: 0, stagger: 0.12, duration: 1, ease: "power2.out" }); break;
         case "rotate-in":   tl.from(kids, { y: 40, rotation: 3, opacity: 0, stagger: 0.1, duration: 0.9, ease: "power3.out" }); break;
-        case "stagger-up":  tl.from(kids, { y: 60,  opacity: 0, stagger: 0.15, duration: 0.8, ease: "power3.out" }); break;
+        case "stagger-up":  tl.from(kids, { y: 60, opacity: 0, stagger: 0.15, duration: 0.8, ease: "power3.out" }); break;
         case "clip-reveal":tl.from(kids, { clipPath: "inset(100% 0 0 0)", opacity: 0, stagger: 0.15, duration: 1.2, ease: "power4.inOut" }); break;
       }
 
@@ -151,8 +136,7 @@
         onUpdate: function (self) {
           var p = self.progress;
           var inside = p >= enter && p <= leave;
-          var past   = p > leave;
-
+          var past = p > leave;
           if (inside && !on) { sec.classList.add("is-visible"); tl.play(); on = true; }
           else if (!inside && on && !(persist && past)) { sec.classList.remove("is-visible"); tl.reverse(); on = false; }
           if (persist && past) sec.classList.add("is-visible");
@@ -161,14 +145,12 @@
     });
   }
 
-  /* ---------- counters ---------- */
   function initCounters() {
     document.querySelectorAll(".stat-number").forEach(function (el) {
       var target = +el.dataset.value, dec = +(el.dataset.decimals || 0);
       var o = { v: 0, playing: false };
       var sec = el.closest(".scroll-section");
       var enter = +sec.dataset.enter / 100, leave = +sec.dataset.leave / 100;
-
       ScrollTrigger.create({
         trigger: scroller, start: "top top", end: "bottom bottom",
         onUpdate: function (self) {
@@ -183,13 +165,12 @@
     });
   }
 
-  /* ---------- marquees ---------- */
   function initMarquees() {
     document.querySelectorAll(".marquee-wrap").forEach(function (el) {
       var speed = +(el.dataset.scrollSpeed) || -25;
       var enter = +(el.dataset.enter) / 100;
       var leave = +(el.dataset.leave) / 100;
-      var txt   = el.querySelector(".marquee-text");
+      var txt = el.querySelector(".marquee-text");
 
       gsap.to(txt, { xPercent: speed, ease: "none",
         scrollTrigger: { trigger: scroller, start: "top top", end: "bottom bottom", scrub: true } });
@@ -207,7 +188,6 @@
     });
   }
 
-  /* ---------- dark overlay ---------- */
   function initOverlay() {
     var s = document.querySelector(".section-stats");
     if (!s) return;
@@ -224,27 +204,6 @@
     });
   }
 
-  /* ---------- BOOT ---------- */
-  async function init() {
-    resize();
-    window.addEventListener("resize", function () { resize(); if (cur >= 0) draw(cur); });
-
-    await preload();
-
-    loader.classList.add("hidden");
-    lenis.start();
-    animateHero();
-    initHeroFade();
-    initFrameScroll();
-    initSections();
-    initCounters();
-    initMarquees();
-    initOverlay();
-    initContactModal();
-    draw(0);
-  }
-
-  /* ---------- contact modal ---------- */
   function initContactModal() {
     var overlay = document.getElementById("contact-modal");
     var openBtn = document.getElementById("open-contact");
@@ -264,7 +223,6 @@
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       submitBtn.classList.add("is-sending");
-
       fetch(form.action, {
         method: "POST",
         body: new FormData(form),
@@ -287,6 +245,23 @@
         submitBtn.classList.remove("is-sending");
       });
     });
+  }
+
+  async function init() {
+    resize();
+    window.addEventListener("resize", function () { resize(); if (cur >= 0) draw(cur); });
+    await preload();
+    loader.classList.add("hidden");
+    lenis.start();
+    animateHero();
+    initHeroFade();
+    initFrameScroll();
+    initSections();
+    initCounters();
+    initMarquees();
+    initOverlay();
+    initContactModal();
+    draw(0);
   }
 
   init();
